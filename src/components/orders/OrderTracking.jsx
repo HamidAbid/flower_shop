@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { FaTruck, FaCheckCircle, FaBox, FaBoxOpen, FaClipboardCheck, FaSpinner } from 'react-icons/fa';
-import { ordersAPI } from '../../utils/api';
 
-/**
- * A component for displaying order tracking and status information
- * @param {Object} props
- * @param {Object|string} props.order - Order object or order ID/tracking number
- * @param {boolean} props.showDetails - Whether to show detailed tracking information
- * @param {boolean} props.hideForm - Whether to hide the tracking form
- */
+
 const OrderTracking = ({ order: initialOrder, showDetails = true, hideForm = false }) => {
   const [order, setOrder] = useState(initialOrder);
   const [loading, setLoading] = useState(false);
@@ -22,7 +15,7 @@ const OrderTracking = ({ order: initialOrder, showDetails = true, hideForm = fal
     const fetchOrder = async (identifier) => {
       try {
         setLoading(true);
-        const response = await ordersAPI.trackOrder(identifier);
+        // const response = await ordersAPI.trackOrder(identifier);
         setOrder(response.data);
         setError(null);
       } catch (err) {

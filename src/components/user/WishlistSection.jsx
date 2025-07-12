@@ -1,13 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaTrash, FaShoppingCart, FaSearch } from 'react-icons/fa';
-import { CartContext } from '../../App';
+import { useCart } from '../../context/cartContext';
 
 const WishlistSection = ({ wishlist, onRemove }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { cartItems, setCartItems } = useContext(CartContext);
-  
-  // Filter wishlist items
+  const { addToCart } = useCart();
+
   const filteredItems = wishlist.filter(item => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -16,32 +15,16 @@ const WishlistSection = ({ wishlist, onRemove }) => {
       (item.price && item.price.toString().includes(searchTerm))
     );
   });
-  
-  // Handle add to cart
+
   const handleAddToCart = (product) => {
-    // Check if product already in cart
-    const existingItem = cartItems.find(item => item._id === product._id);
-    
-    if (existingItem) {
-      // Update quantity if already in cart
-      setCartItems(
-        cartItems.map(item =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      // Add new item to cart
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-    }
+    addToCart(product._id, 1); // Add one quantity of the item
   };
-  
+
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-6">My Wishlist</h2>
-      
-      {/* Search */}
+
+      {/* Search Input */}
       <div className="mb-6">
         <div className="relative">
           <input
@@ -54,7 +37,7 @@ const WishlistSection = ({ wishlist, onRemove }) => {
           <FaSearch className="absolute left-3 top-3 text-gray-400" />
         </div>
       </div>
-      
+
       {wishlist.length === 0 ? (
         <div className="text-center py-8 bg-gray-50 rounded-lg">
           <p className="text-gray-500">Your wishlist is empty.</p>
@@ -83,15 +66,15 @@ const WishlistSection = ({ wishlist, onRemove }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               <div className="p-4">
                 <Link to={`/product/${item._id}`} className="hover:text-primary">
                   <h3 className="font-semibold text-lg mb-1">{item.name}</h3>
                 </Link>
-                
+
                 <p className="text-gray-600 mb-2">{item.category}</p>
                 <p className="font-bold text-lg mb-3">${item.price?.toFixed(2)}</p>
-                
+
                 <div className="flex justify-between">
                   <button
                     onClick={() => handleAddToCart(item)}
@@ -99,7 +82,7 @@ const WishlistSection = ({ wishlist, onRemove }) => {
                   >
                     <FaShoppingCart className="mr-1" /> Add to Cart
                   </button>
-                  
+
                   <button
                     onClick={() => onRemove(item._id)}
                     className="text-red-500 hover:text-red-700"
@@ -117,4 +100,4 @@ const WishlistSection = ({ wishlist, onRemove }) => {
   );
 };
 
-export default WishlistSection; 
+export default WishlistSection;

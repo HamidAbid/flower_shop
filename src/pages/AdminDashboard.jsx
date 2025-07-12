@@ -9,7 +9,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, 
   CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import { AuthContext } from '../App';
+import { AuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
 // Sample data (in a real app, this would come from an API)

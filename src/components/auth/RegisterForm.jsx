@@ -94,19 +94,21 @@ const RegisterForm = ({ onRegister, isLoading = false, error = '' }) => {
   };
   
   const validatePasswordMatch = (password, confirmPassword) => {
+    if (!confirmPassword) return true;
+  
     if (password !== confirmPassword) {
       setErrors(prev => ({
         ...prev,
-        confirmPassword: 'Passwords do not match'
+        confirmPassword: 'Passwords do not match',
       }));
-      return false;
+      return true;
     }
-    
+  
     setErrors(prev => ({
       ...prev,
-      confirmPassword: ''
+      confirmPassword: '',
     }));
-    return true;
+    return false;
   };
   
   const validateField = (name, value) => {

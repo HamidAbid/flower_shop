@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
-import { authAPI } from '../utils/api';
+import axios from 'axios';
+import {useAuth} from '../context/authContext'
 
 const Register = () => {
   const [activeTab, setActiveTab] = useState('login'); // 'login' or 'signup'
@@ -19,13 +19,13 @@ const Register = () => {
     phone: '',
     agreeTerms: false
   });
-  
+  const {storeTokenInLS,token,setUser,authError,setAuthError}=useAuth()
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
-  const { setUser, authError, setAuthError } = useContext(AuthContext);
+ 
   
   // Clear error messages when switching tabs
   useEffect(() => {
@@ -128,7 +128,7 @@ const Register = () => {
         password: formData.loginPassword ? '********' : 'empty'
       });
       
-      const { data } = await authAPI.login({
+      const { data } = await axios.post('/api/auth/login',{
         email: formData.loginEmail,
         password: formData.loginPassword
       });
@@ -140,8 +140,7 @@ const Register = () => {
       }
       
       // Store token in localStorage
-      localStorage.setItem('token', data.token);
-      console.log('Token saved to localStorage');
+      storeTokenInLS(data.token)
       
       // Update user context
       setUser({
@@ -182,19 +181,14 @@ const Register = () => {
     setGeneralError('');
     
     try {
-      console.log('Attempting registration with:', {
-        name: formData.fullName,
-        email: formData.email,
-        password: formData.password ? '********' : 'empty',
-        phone: formData.phone
-      });
-      
-      const { data } = await authAPI.register({
+     
+      const { data } = await axios.post('/api/auth/register',{
         name: formData.fullName,
         email: formData.email,
         password: formData.password,
         phone: formData.phone
       });
+      
       
       console.log('Registration successful, received data:', data);
       

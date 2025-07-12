@@ -4,27 +4,24 @@ import User from '../models/User.js';
 // Middleware to verify JWT token
 export const auth = async (req, res, next) => {
   try {
-    const authHeader = req.header('Authorization');
-    const token = authHeader?.replace('Bearer ', '');
     
-    console.log('Auth middleware called');
-    console.log('Authorization header:', authHeader ? 'present' : 'missing');
+    const authHeader = req.header('Authorization');
+    const token = authHeader?.replace('Bearer ','');
+
+    
     
     if (!token) {
       console.log('Authentication failed: No token provided');
       return res.status(401).json({ message: 'No authentication token, access denied' });
     }
+
     
     try {
-      if (!process.env.JWT_SECRET) {
-        console.error('JWT_SECRET is not defined in environment variables');
-        return res.status(500).json({ message: 'Server configuration error' });
-      }
-      
+     
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log('Token verified successfully for user ID:', decoded.id);
+     
       
-      const user = await User.findById(decoded.id).select('-password');
+      const user = await User.findById(decoded.id);
       
       if (!user) {
         console.log('Authentication failed: User not found for token');

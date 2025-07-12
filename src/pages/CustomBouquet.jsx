@@ -1,5 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
-import { CartContext } from '../App';
+import { useCart } from '../context/cartContext';
+
+
 import { motion } from 'framer-motion';
 
 // Sample flower types with color options
@@ -160,7 +162,9 @@ const colorPaletteOptions = [
 ];
 
 const CustomBouquet = () => {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, addToCart, removeFromCart } = useCart();
+
+
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedFlowerColor, setSelectedFlowerColor] = useState(null);

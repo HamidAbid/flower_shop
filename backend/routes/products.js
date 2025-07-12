@@ -5,7 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  createProductReview
+  createProductReview,
 } from '../controllers/productController.js';
 import { auth, isAdmin } from '../middleware/auth.js';
 

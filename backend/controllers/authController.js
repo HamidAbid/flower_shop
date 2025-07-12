@@ -13,7 +13,7 @@ const generateToken = (id) => {
       expiresIn: '30d'
     });
     
-    console.log(`Token generated for user ID: ${id}`);
+    // console.log(`Token generated for user ID: ${id}`);
     return token;
   } catch (error) {
     console.error('Error generating token:', error);
@@ -26,39 +26,33 @@ const generateToken = (id) => {
 // @access  Public
 export const register = async (req, res) => {
   try {
-    console.log('Register request received:', {
-      name: req.body.name,
-      email: req.body.email,
-      hasPassword: !!req.body.password
-    });
-
-    const { name, email, password } = req.body;
+  
+console.log(1);
+    const { name, email, password,number } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      console.log(`Registration failed: User with email ${email} already exists`);
       return res.status(400).json({ message: 'User already exists' });
     }
+    console.log("1",number);
 
     // Create user
     const user = await User.create({
       name,
       email,
-      password
+      password,
+      number
     });
+
 
     if (user) {
       console.log(`User registered successfully: ${user._id}`);
       
       // Generate token
-      const token = generateToken(user._id);
+      const token = await generateToken(user._id);
       
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+     return res.status(201).json({
         token
       });
     }
@@ -73,18 +67,14 @@ export const register = async (req, res) => {
 // @access  Public
 export const login = async (req, res) => {
   try {
-    console.log('Login request received:', {
-      email: req.body.email,
-      hasPassword: !!req.body.password
-    });
+   
 
     const { email, password } = req.body;
-
+console.log(email,password);
     // Check for user email
     const user = await User.findOne({ email });
     
     if (!user) {
-      console.log(`Login failed: No user found with email ${email}`);
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     
@@ -96,7 +86,6 @@ export const login = async (req, res) => {
       // Generate token
       const token = generateToken(user._id);
       
-      console.log(`User logged in successfully: ${user._id}`);
       res.json({
         _id: user._id,
         name: user.name,
@@ -119,7 +108,7 @@ export const login = async (req, res) => {
 // @access  Private
 export const getProfile = async (req, res) => {
   try {
-    console.log(`Getting profile for user: ${req.user._id}`);
+ 
     
     const user = await User.findById(req.user._id);
     if (user) {
@@ -133,11 +122,11 @@ export const getProfile = async (req, res) => {
         phone: user.phone
       });
     } else {
-      console.log(`Profile not found for user: ${req.user._id}`);
+      
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Error retrieving profile:', error);
+   
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 }; 

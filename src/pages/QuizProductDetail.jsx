@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { CartContext } from '../App';
+import { useCart } from '../context/cartContext';
 import { motion } from 'framer-motion';
 
 // Sample bouquet recommendations (same as in QuickQuiz.jsx)

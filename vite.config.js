@@ -13,10 +13,10 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
   },
-  server: {
-    port: 3000,
-    open: true,
-    cors: true
+  server:{
+    proxy: {
+      "/api": "http://localhost:5000",
+    },
   },
   build: {
     outDir: 'dist',

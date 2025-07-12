@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
-import { userAPI, authAPI } from '../utils/api';
+import { AuthContext } from '../context/authContext';
+// import { userAPI, authAPI } from '../utils/api';
 
 // Components
 import UserSidebar from '../components/dashboard/UserSidebar';

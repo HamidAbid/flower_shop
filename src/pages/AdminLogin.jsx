@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
+import { AuthContext } from '../context/authContext';
 import { motion } from 'framer-motion';
 import { 
   FaLock, FaUser, FaGoogle, FaEye, FaEyeSlash, FaMoon, FaSun, FaExclamationCircle
